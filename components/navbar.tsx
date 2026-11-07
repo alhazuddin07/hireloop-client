@@ -42,12 +42,18 @@ function NavbarLinks() {
 function NavbarActions() {
   return (
     <div className="flex items-center gap-3">
-      <Button className="h-13 px-6 text-base text-[#645BFF]" variant="ghost">
+      <Link
+        href="/sign-in"
+        className="inline-flex h-13 items-center justify-center rounded-lg px-6 text-base font-medium text-[#645BFF] transition-colors hover:bg-white/[0.04]"
+      >
         Sign In
-      </Button>
-      <Button className="h-13 rounded-[8px] border border-[#090A15]/10 bg-[#5C53FE] px-6 text-base text-[#EDEDEF] shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] hover:bg-[#4A42E8]">
+      </Link>
+      <Link
+        href="/sign-up"
+        className="inline-flex h-13 items-center justify-center rounded-[8px] border border-[#090A15]/10 bg-[#5C53FE] px-6 text-base font-medium text-[#EDEDEF] shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] transition-colors hover:bg-[#4A42E8]"
+      >
         Get Started
-      </Button>
+      </Link>
     </div>
   )
 }
@@ -122,19 +128,16 @@ export function Navbar() {
             </nav>
             <SheetFooter className="flex-col items-stretch gap-3 border-t border-white/[0.07] px-6 py-6">
               <SheetClose
-                render={
-                  <Button
-                    className="h-13 px-6 text-base text-[#645BFF]"
-                    variant="ghost"
-                  />
-                }
+                nativeButton={false}
+                render={<Link href="/sign-in" />}
+                className="inline-flex h-13 items-center justify-center rounded-lg px-6 text-base font-medium text-[#645BFF] transition-colors hover:bg-white/[0.04]"
               >
                 Sign In
               </SheetClose>
               <SheetClose
-                render={
-                  <Button className="h-13 rounded-[8px] border border-[#090A15]/10 bg-[#5C53FE] px-6 text-base text-[#EDEDEF] shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] hover:bg-[#4A42E8]" />
-                }
+                nativeButton={false}
+                render={<Link href="/sign-up" />}
+                className="inline-flex h-13 items-center justify-center rounded-[8px] border border-[#090A15]/10 bg-[#5C53FE] px-6 text-base font-medium text-[#EDEDEF] shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] transition-colors hover:bg-[#4A42E8]"
               >
                 Get Started
               </SheetClose>

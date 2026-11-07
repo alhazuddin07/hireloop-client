@@ -25,7 +25,7 @@ Next.js 16 App Router frontend for HireLoop. Better Auth is the only backend cod
 
 - `app/` is the App Router; there is no `src/`. `@/*` maps to the **repo root**, so `@/components/ui/button`, `@/lib/auth`, `@/app/images/logo.png`.
 - `components/ui/` holds shadcn-generated primitives; `components/` holds app components. `lib/` holds auth and utils; `hooks/` is empty.
-- Only `/` has a page today. Navbar links to `/jobs`, `/company`, `/pricing` are placeholders with no routes yet.
+- Routes: `/`, `/sign-in`, `/sign-up`. Navbar links to `/jobs`, `/company`, `/pricing` are placeholders with no routes yet.
 - Images live in `app/images/` and are imported (`import logo from "@/app/images/logo.png"`), not served from the empty `public/`.
 
 ## UI conventions (non-default)
