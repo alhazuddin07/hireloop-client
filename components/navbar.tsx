@@ -42,10 +42,7 @@ function NavbarLinks() {
 function NavbarActions() {
   return (
     <div className="flex items-center gap-3">
-      <Button
-        className="h-13 px-6 text-base text-[#645BFF]"
-        variant="ghost"
-      >
+      <Button className="h-13 px-6 text-base text-[#645BFF]" variant="ghost">
         Sign In
       </Button>
       <Button className="h-13 rounded-[8px] border border-[#090A15]/10 bg-[#5C53FE] px-6 text-base text-[#EDEDEF] shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] hover:bg-[#4A42E8]">
@@ -72,7 +69,7 @@ function NavbarLogo() {
 export function Navbar() {
   return (
     <header className="w-full">
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between py-4">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
         <NavbarLogo />
 
         {/* Desktop: pill nav */}
