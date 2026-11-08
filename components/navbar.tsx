@@ -16,16 +16,23 @@ import {
 } from "@/components/ui/sheet"
 import { authClient } from "@/lib/auth-client"
 
-const navLinks = [
-  { href: "/jobs", label: "Browse Jobs" },
-  { href: "/company", label: "Company" },
-  { href: "/pricing", label: "Pricing" },
-]
+
+
 
 const navPillClasses =
   "hidden h-[68px] items-center gap-3 rounded-[8px] border border-white/[0.07] bg-[#1A1A1F] pl-6 pr-2 lg:flex"
 
 function NavbarLinks() {
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
+
+  const navLinks = [
+    { href: "/jobs", label: "Browse Jobs" },
+    { href: "/company", label: "Company" },
+    { href: "/pricing", label: "Pricing" },
+    { href: `/dashboard/${user?.role || "seeker"}`, label: "Dashboard" },
+  ]
+
   return (
     <div className="flex items-center gap-5">
       {navLinks.map((link) => (
@@ -76,12 +83,18 @@ function NavbarLogo() {
 
 export function Navbar() {
 
-  const {data: session} = authClient.useSession();
+  const { data: session } = authClient.useSession();
   const user = session?.user;
 
-  console.log("user session", user);
+  const navLinks = [
+    { href: "/jobs", label: "Browse Jobs" },
+    { href: "/company", label: "Company" },
+    { href: "/pricing", label: "Pricing" },
+    { href: `/dashboard/${user?.role || "seeker"}`, label: "Dashboard" },
+  ]
 
-  const handleSignOut = async()=> {
+
+  const handleSignOut = async () => {
     await authClient.signOut();
   }
 
