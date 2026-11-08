@@ -2,13 +2,23 @@
 
 import { useState, type FormEvent } from "react"
 import { useRouter } from "next/navigation"
+import { cn } from "cn"
 
 import { AuthShell } from "@/components/auth-shell"
 import { Field, PasswordField } from "@/components/auth-fields"
 import { authClient } from "@/lib/auth-client"
 
+const roles = [
+  { value: "seeker", label: "Job seeker" },
+  { value: "recruiter", label: "Recruiter" },
+  { value: "admin", label: "Admin" },
+] as const
+
+type Role = (typeof roles)[number]["value"]
+
 export function SignUpForm() {
   const router = useRouter()
+  const [role, setRole] = useState<Role>("seeker")
   const [error, setError] = useState("")
   const [pending, setPending] = useState(false)
 
@@ -25,15 +35,16 @@ export function SignUpForm() {
     if (password !== confirmPassword) {
       setError("Passwords do not match.")
       return
-    };
+    }
 
-    setPending(true);
+    setPending(true)
 
     try {
       const { error } = await authClient.signUp.email({
         name,
         email,
         password,
+        role,
         callbackURL: "/",
       })
 
@@ -50,7 +61,7 @@ export function SignUpForm() {
     } finally {
       setPending(false)
     }
-  };
+  }
 
   return (
     <AuthShell mode="sign-up">
@@ -63,6 +74,39 @@ export function SignUpForm() {
           placeholder="Enter your name"
           required
         />
+
+        <div className="space-y-1.5">
+          <span className="block text-sm font-medium text-[#D6D6DC]">
+            I am joining as
+          </span>
+          <div
+            role="radiogroup"
+            aria-label="Account type"
+            className="grid grid-cols-3 gap-1 rounded-xl border border-white/6 bg-[#121318] p-1"
+          >
+            {roles.map((option) => {
+              const active = role === option.value
+
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => setRole(option.value)}
+                  className={cn(
+                    "rounded-lg py-2 text-center text-[13px] font-medium transition-colors sm:text-sm",
+                    active
+                      ? "bg-[#1E1F27] text-[#F4F4F6] shadow-sm"
+                      : "text-[#8C8C95] hover:text-[#EDEDEF]"
+                  )}
+                >
+                  {option.label}
+                </button>
+              )
+            })}
+          </div>
+        </div>
 
         <Field
           id="email"
