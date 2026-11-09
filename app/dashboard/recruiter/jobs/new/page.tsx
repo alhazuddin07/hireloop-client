@@ -82,21 +82,20 @@ export default function NewJobPage() {
     setForm((current) => ({ ...current, [field]: value }))
   }
 
-  const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     // The whole job post is ready here as one plain object
 
-    const jobData:  JobForm = { ...form }
-    
-    console.log("jobdata",jobData)
-    
-    const result = await createJob(jobData);
-    console.log("createJob result", result);
+    const jobData: JobForm = { ...form }
 
+    console.log("jobdata", jobData)
+
+    const result = await createJob(jobData)
+    console.log("createJob result", result)
   }
 
   return (
-    <form onSubmit={handleSubmit} className="min-h-svh bg-[#131314] p-6">
+    <form onSubmit={handleSubmit} className="flex-1 p-6">
       <div className="mx-auto max-w-5xl">
         {/* Top bar */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -119,7 +118,6 @@ export default function NewJobPage() {
               across our network.
             </p>
           </div>
-
         </div>
 
         <div className="mt-6 space-y-6">
@@ -402,15 +400,15 @@ export default function NewJobPage() {
             </div>
           </div>
         </div>
-      </div>
-      <div>
-        <Button
-          type="submit"
-          className="h-11 gap-2 rounded-xl bg-[#5C53FE] px-6 text-[15px] text-white hover:bg-[#4A42E8]"
-        >
-          Publish Job
-          <ArrowRight className="size-4" />
-        </Button>
+        <div>
+          <Button
+            type="submit"
+            className="h-11 gap-2 rounded-xl bg-[#5C53FE] px-6 text-[15px] text-white hover:bg-[#4A42E8]"
+          >
+            Publish Job
+            <ArrowRight className="size-4" />
+          </Button>
+        </div>
       </div>
     </form>
   )
