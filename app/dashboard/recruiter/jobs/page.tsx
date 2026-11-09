@@ -19,109 +19,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { getJobs } from "@/lib/api/jobs"
 
 type JobStatus = "Active" | "Expired"
 
 // Same shape we collect on the New Job page, plus the table's own fields
 type JobPost = JobForm & {
+  _id: string,
   id: string
   status: JobStatus
   applicants: number
   posted: string
 }
-
-const DUMMY_JOBS: JobPost[] = [
-  {
-    id: "JB-1041",
-    title: "Frontend Developer",
-    company: "HirePulse Network",
-    category: "Engineering & Tech",
-    jobType: "Full-time",
-    isRemote: true,
-    location: "New York, USA",
-    deadline: "2025-05-30",
-    minSalary: "25",
-    maxSalary: "40",
-    frequency: "per hour",
-    responsibilities: "Build and maintain web interfaces",
-    qualifications: "React, TypeScript",
-    status: "Active",
-    applicants: 34,
-    posted: "Posted 4d ago",
-  },
-  {
-    id: "JB-1038",
-    title: "Senior Product Designer",
-    company: "HirePulse Labs",
-    category: "Design",
-    jobType: "Full-time",
-    isRemote: false,
-    location: "London, UK (Hybrid)",
-    deadline: "2025-06-14",
-    minSalary: "90k",
-    maxSalary: "115k",
-    frequency: "per year",
-    responsibilities: "Own the product design across surfaces",
-    qualifications: "Figma, design systems",
-    status: "Active",
-    applicants: 19,
-    posted: "Posted 1w ago",
-  },
-  {
-    id: "JB-1035",
-    title: "DevOps Specialist",
-    company: "HirePulse Platform",
-    category: "Engineering & Tech",
-    jobType: "Full-time",
-    isRemote: false,
-    location: "Berlin, Germany",
-    deadline: "2025-06-30",
-    minSalary: "95k",
-    maxSalary: "120k",
-    frequency: "per year",
-    responsibilities: "Run and scale our cloud infrastructure",
-    qualifications: "Kubernetes, Terraform",
-    status: "Active",
-    applicants: 12,
-    posted: "Posted 2w ago",
-  },
-  {
-    id: "JB-1031",
-    title: "Product Marketing Lead",
-    company: "HirePulse Network",
-    category: "Marketing",
-    jobType: "Full-time",
-    isRemote: true,
-    location: "Remote (EU/US)",
-    deadline: "2025-07-15",
-    minSalary: "80k",
-    maxSalary: "105k",
-    frequency: "per year",
-    responsibilities: "Lead go-to-market campaigns",
-    qualifications: "5+ years in B2B SaaS marketing",
-    status: "Active",
-    applicants: 27,
-    posted: "Posted 5d ago",
-  },
-  {
-    id: "JB-1027",
-    title: "QA Automation Engineer",
-    company: "HirePulse Platform",
-    category: "Engineering & Tech",
-    jobType: "Part-time",
-    isRemote: false,
-    location: "Dublin, Ireland (Hybrid)",
-    deadline: "2025-05-01",
-    minSalary: "35",
-    maxSalary: "50",
-    frequency: "per hour",
-    responsibilities: "Automate regression and E2E test suites",
-    qualifications: "Playwright, CI pipelines",
-    status: "Expired",
-    applicants: 8,
-    posted: "Closed",
-  },
-]
 
 const FREQUENCY_SHORT: Record<string, string> = {
   "per hour": "hr",
@@ -156,7 +65,11 @@ const STATUS_DOT_STYLES = {
 const HEAD_CELL =
   "h-[50px] px-3 text-[13px] font-medium uppercase text-[#A0A0AB] whitespace-nowrap"
 
-export default function ManageJobsPage() {
+export default async function ManageJobsPage() {
+
+  const jobs = await getJobs();
+  console.log("ddddd", jobs);
+
   return (
     <div className="flex-1 p-6">
       <div className="mx-auto max-w-7xl">
@@ -223,9 +136,9 @@ export default function ManageJobsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {DUMMY_JOBS.map((job) => (
+              {jobs.map((job :JobPost ) => (
                 <TableRow
-                  key={job.id}
+                  key={job._id}
                   className="border-b border-[#232327] last:border-0 hover:bg-[#1A1A1B]/50"
                 >
                   {/* Title & dept */}
