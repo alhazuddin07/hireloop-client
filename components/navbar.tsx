@@ -16,15 +16,12 @@ import {
 } from "@/components/ui/sheet"
 import { authClient } from "@/lib/auth-client"
 
-
-
-
 const navPillClasses =
   "hidden h-[68px] items-center gap-3 rounded-[8px] border border-white/[0.07] bg-[#1A1A1F] pl-6 pr-2 lg:flex"
 
 function NavbarLinks() {
-  const { data: session } = authClient.useSession();
-  const user = session?.user;
+  const { data: session } = authClient.useSession()
+  const user = session?.user
 
   const navLinks = [
     { href: "/jobs", label: "Browse Jobs" },
@@ -82,9 +79,8 @@ function NavbarLogo() {
 }
 
 export function Navbar() {
-
-  const { data: session } = authClient.useSession();
-  const user = session?.user;
+  const { data: session } = authClient.useSession()
+  const user = session?.user
 
   const navLinks = [
     { href: "/jobs", label: "Browse Jobs" },
@@ -93,9 +89,8 @@ export function Navbar() {
     { href: `/dashboard/${user?.role || "seeker"}`, label: "Dashboard" },
   ]
 
-
   const handleSignOut = async () => {
-    await authClient.signOut();
+    await authClient.signOut()
   }
 
   return (
@@ -107,21 +102,20 @@ export function Navbar() {
         <nav className={navPillClasses}>
           <NavbarLinks />
           <Separator orientation="vertical" className="h-6 bg-[#A8A8A8]/40" />
-          {
-            user ? <>
+          {user ? (
+            <>
               <>
                 <span className="p-2">welcome {user.name}</span>
-                <Button
-                  variant={'destructive'}
-                  onClick={handleSignOut}
-                >
+                <Button variant={"destructive"} onClick={handleSignOut}>
                   Sign Out
                 </Button>
               </>
-            </> : <>
+            </>
+          ) : (
+            <>
               <NavbarActions />
             </>
-          }
+          )}
         </nav>
 
         {/* Mobile menu */}
@@ -165,26 +159,30 @@ export function Navbar() {
                 </SheetClose>
               ))}
             </nav>
-            {user ? <>
-              <span>Welcome {user.name}</span>
-            </> : <>
-              <SheetFooter className="flex-col items-stretch gap-3 border-t border-white/[0.07] px-6 py-6">
-                <SheetClose
-                  nativeButton={false}
-                  render={<Link href="/sign-in" />}
-                  className="inline-flex h-13 items-center justify-center rounded-lg px-6 text-base font-medium text-[#645BFF] transition-colors hover:bg-white/4"
-                >
-                  Sign In
-                </SheetClose>
-                <SheetClose
-                  nativeButton={false}
-                  render={<Link href="/sign-up" />}
-                  className="inline-flex h-13 items-center justify-center rounded-[8px] border border-[#090A15]/10 bg-[#5C53FE] px-6 text-base font-medium text-[#EDEDEF] shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] transition-colors hover:bg-[#4A42E8]"
-                >
-                  Get Started
-                </SheetClose>
-              </SheetFooter>
-            </>}
+            {user ? (
+              <>
+                <span>Welcome {user.name}</span>
+              </>
+            ) : (
+              <>
+                <SheetFooter className="flex-col items-stretch gap-3 border-t border-white/[0.07] px-6 py-6">
+                  <SheetClose
+                    nativeButton={false}
+                    render={<Link href="/sign-in" />}
+                    className="inline-flex h-13 items-center justify-center rounded-lg px-6 text-base font-medium text-[#645BFF] transition-colors hover:bg-white/4"
+                  >
+                    Sign In
+                  </SheetClose>
+                  <SheetClose
+                    nativeButton={false}
+                    render={<Link href="/sign-up" />}
+                    className="inline-flex h-13 items-center justify-center rounded-[8px] border border-[#090A15]/10 bg-[#5C53FE] px-6 text-base font-medium text-[#EDEDEF] shadow-[inset_0_3px_10px_rgba(255,255,255,0.2)] transition-colors hover:bg-[#4A42E8]"
+                  >
+                    Get Started
+                  </SheetClose>
+                </SheetFooter>
+              </>
+            )}
           </SheetContent>
         </Sheet>
       </div>
