@@ -47,6 +47,7 @@ export type JobForm = {
   category: string
   jobType: string
   isRemote: boolean
+  status: string
   location: string
   deadline: string
   minSalary: string
@@ -62,6 +63,7 @@ const INITIAL_JOB: JobForm = {
   category: "",
   jobType: "Full-time",
   isRemote: false,
+  status: "active",
   location: "",
   deadline: "",
   minSalary: "",
@@ -110,7 +112,7 @@ export default function NewJobPage() {
               <ChevronRight className="size-3 text-[#A0A0AB]" />
               <span className="text-[#C3C0FF]">Create New Listing</span>
             </nav>
-            <h1 className="mt-1 text-[32px] leading-[42px] font-semibold text-white">
+            <h1 className="mt-1 text-[32px] leading-10.5 font-semibold text-white">
               Post a New Job
             </h1>
             <p className="mt-1 text-[15px] leading-5 text-[#A0A0AB]">
@@ -181,7 +183,7 @@ export default function NewJobPage() {
                         <SelectItem
                           key={category}
                           value={category}
-                          className="data-[highlighted]:bg-[#232327]"
+                          className="data-highlighted:bg-[#232327]"
                         >
                           {category}
                         </SelectItem>
@@ -218,12 +220,12 @@ export default function NewJobPage() {
           {/* Section 2: Location, Compensation & Timeline */}
           <div className={SECTION_CLASSES}>
             <h2 className="flex items-center gap-4 text-lg font-medium text-white">
-              <span className="size-2 shrink-0 rounded-[2px] bg-[#5C53FE]" />
+              <span className="size-2 shrink-0 rounded-xs bg-[#5C53FE]" />
               <span>2. Location, Compensation &amp; Timeline</span>
             </h2>
             <div className="mt-5 space-y-4">
               {/* Remote toggle */}
-              <div className="flex items-center gap-3 rounded-xl border border-[#232327] bg-[#1E1E21] p-[13px]">
+              <div className="flex items-center gap-3 rounded-xl border border-[#232327] bg-[#1E1E21] p-3.25">
                 <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-[#232327]">
                   <Globe className="size-5 text-white" />
                 </span>
@@ -357,7 +359,7 @@ export default function NewJobPage() {
           {/* Section 3: Responsibilities & Requirements */}
           <div className={SECTION_CLASSES}>
             <h2 className="flex items-center gap-4 text-lg font-medium text-white">
-              <span className="size-2 shrink-0 rounded-[2px] bg-[#5C53FE]" />
+              <span className="size-2 shrink-0 rounded-xs bg-[#5C53FE]" />
               <span>3. Responsibilities &amp; Requirements</span>
             </h2>
             <div className="mt-5 space-y-4">
@@ -375,7 +377,7 @@ export default function NewJobPage() {
                   placeholder="Showcase your commitment to delivering exceptional user interfaces and digital experiences. You will collaborate directly with systems designers and backend engineers to craft responsive, micro-interaction rich products."
                   rows={3}
                   required
-                  className="min-h-24 rounded-xl border-none bg-[#1E1E21] px-4 py-3 text-[15px] leading-[22px] text-[#F4F4F5] placeholder:text-[#A0A0AB]"
+                  className="min-h-24 rounded-xl border-none bg-[#1E1E21] px-4 py-3 text-[15px] leading-5.5 text-[#F4F4F5] placeholder:text-[#A0A0AB]"
                 />
               </div>
               <div className="space-y-1">

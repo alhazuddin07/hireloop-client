@@ -20,11 +20,12 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { getJobs } from "@/lib/api/jobs"
+import { DeleteJobDialog } from "@/app/components/DeleteJobDialog"
 
 type JobStatus = "Active" | "Expired"
 
 // Same shape we collect on the New Job page, plus the table's own fields
-type JobPost = JobForm & {
+export type JobPost = JobForm & {
   _id: string,
   id: string
   status: JobStatus
@@ -215,13 +216,9 @@ export default async function ManageJobsPage() {
                       >
                         <Eye className="size-4" />
                       </button>
-                      <button
-                        type="button"
-                        aria-label={`More actions for ${job.title}`}
-                        className="inline-flex size-8 items-center justify-center rounded-lg text-[#A0A0AB] hover:bg-[#1F1F1F] hover:text-white"
-                      >
-                        <EllipsisVertical className="size-4" />
-                      </button>
+
+                      <DeleteJobDialog  job={job}/>
+
                     </div>
                   </TableCell>
                 </TableRow>
