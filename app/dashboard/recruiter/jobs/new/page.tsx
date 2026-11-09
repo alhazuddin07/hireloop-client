@@ -25,6 +25,7 @@ import {
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "cn"
+import { createJob } from "@/lib/actions/jobs"
 
 const JOB_TYPES = ["Full-time", "Part-time", "Contract", "Internship"]
 
@@ -40,7 +41,7 @@ const JOB_CATEGORIES = [
 
 const SALARY_FREQUENCIES = ["per hour", "per week", "per month", "per year"]
 
-type JobForm = {
+export type JobForm = {
   title: string
   company: string
   category: string
@@ -81,11 +82,17 @@ export default function NewJobPage() {
     setForm((current) => ({ ...current, [field]: value }))
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     // The whole job post is ready here as one plain object
-    console.log(form)
-    // TODO: send to API, e.g. fetch("/api/jobs", { method: "POST", body: JSON.stringify(form) })
+
+    const jobData:  JobForm = { ...form }
+    
+    console.log("jobdata",jobData)
+    
+    const result = await createJob(jobData);
+    console.log("createJob result", result);
+
   }
 
   return (
