@@ -10,6 +10,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { useSession } from "@/lib/auth-client"
+import type { MenuItem, Role } from "@/types/menu"
 import Link from "next/link"
 import {
   Bookmark,
@@ -22,16 +23,7 @@ import {
   PlusCircle,
   Settings,
   Users,
-  type LucideIcon,
 } from "lucide-react"
-
-type Role = "seeker" | "recruiter" | "admin"
-
-type MenuItem = {
-  name: string
-  url: string
-  icon: LucideIcon
-}
 
 const menuItemsByRole: Record<Role, MenuItem[]> = {
   seeker: [

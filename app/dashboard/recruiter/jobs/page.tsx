@@ -9,7 +9,6 @@ import {
   Users,
 } from "lucide-react"
 
-import type { JobForm } from "@/app/dashboard/recruiter/jobs/new/page"
 import {
   Table,
   TableBody,
@@ -18,54 +17,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { StatusBadge } from "@/components/jobs/status-badge"
 import { getJobs } from "@/lib/api/jobs"
+import { formatDeadline, formatSalary } from "@/lib/jobs"
+import type { JobPost } from "@/types/job"
 import { DeleteJobDialog } from "@/app/components/DeleteJobDialog"
 
-
-// Same shape we collect on the New Job page, plus the table's own fields
-export type JobPost = JobForm & {
-  _id: string,
-  id: string
-  posted: string
-}
-
-const FREQUENCY_SHORT: Record<string, string> = {
-  "per hour": "hr",
-  "per week": "wk",
-  "per month": "mo",
-  "per year": "yr",
-}
-
-function formatSalary(job: JobPost) {
-  const unit = FREQUENCY_SHORT[job.frequency] ?? job.frequency
-  return `€${job.minSalary} – €${job.maxSalary} / ${unit}`
-}
-
-function formatDeadline(job: JobPost) {
-  return new Date(job.deadline).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  })
-}
-
-const STATUS_STYLES = {
-  active: "bg-[#14532D]/40 text-[#4ADE80]",
-  expired: "bg-[#1F1F1F] text-[#A0A0AB]",
-} as const
-
-const STATUS_DOT_STYLES = {
-  active: "bg-[#4ADE80]",
-  expired: "bg-[#5A5A60]",
-} as const
-
 const HEAD_CELL =
-  "h-[50px] px-3 text-[13px] font-medium uppercase text-[#A0A0AB] whitespace-nowrap"
+  "h-[50px] px-3 text-left text-[13px] font-medium uppercase text-[#A0A0AB] whitespace-nowrap"
 
 export default async function ManageJobsPage() {
-
-  const jobs = await getJobs();
-  console.log("ddddd", jobs);
+  const jobs = await getJobs()
 
   return (
     <div className="flex-1 p-6">
@@ -104,27 +66,19 @@ export default async function ManageJobsPage() {
           <Table className="min-w-225">
             <TableHeader>
               <TableRow className="border-b border-[#232327] bg-[#0B0B0C] hover:bg-[#0B0B0C]">
-                <TableHead className={`${HEAD_CELL} px-5 text-left`}>
+                <TableHead className={`${HEAD_CELL} px-5`}>
                   Job Title &amp; Dept
                 </TableHead>
-                <TableHead className={`${HEAD_CELL} text-left`}>
+                <TableHead className={HEAD_CELL}>
                   Company &amp; Location
                 </TableHead>
-                <TableHead className={`${HEAD_CELL} text-left`}>Type</TableHead>
-                <TableHead className={`${HEAD_CELL} text-left`}>
-                  Compensation
-                </TableHead>
-                <TableHead
-                  className={`${HEAD_CELL} hidden text-left md:table-cell`}
-                >
+                <TableHead className={HEAD_CELL}>Type</TableHead>
+                <TableHead className={HEAD_CELL}>Compensation</TableHead>
+                <TableHead className={`${HEAD_CELL} hidden md:table-cell`}>
                   Applicants
                 </TableHead>
-                <TableHead className={`${HEAD_CELL} text-left`}>
-                  Status
-                </TableHead>
-                <TableHead
-                  className={`${HEAD_CELL} hidden text-left lg:table-cell`}
-                >
+                <TableHead className={HEAD_CELL}>Status</TableHead>
+                <TableHead className={`${HEAD_CELL} hidden lg:table-cell`}>
                   Deadline
                 </TableHead>
                 <TableHead className={`${HEAD_CELL} pr-5 text-right`}>
@@ -133,7 +87,7 @@ export default async function ManageJobsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {jobs.map((job :JobPost ) => (
+              {jobs.map((job: JobPost) => (
                 <TableRow
                   key={job._id}
                   className="border-b border-[#232327] last:border-0 hover:bg-[#1A1A1B]/50"
@@ -179,14 +133,7 @@ export default async function ManageJobsPage() {
                   </TableCell>
                   {/* Status */}
                   <TableCell className="px-3 py-4 whitespace-nowrap">
-                    <span
-                      className={`inline-flex h-7 items-center gap-2 rounded-full px-3 ${STATUS_STYLES[job.status]}`}
-                    >
-                      <span
-                        className={`size-1.5 rounded-full ${STATUS_DOT_STYLES[job.status]}`}
-                      />
-                      {job.status}
-                    </span>
+                    <StatusBadge status={job.status} />
                   </TableCell>
                   {/* Deadline (hidden on small screens) */}
                   <TableCell className="hidden px-3 py-4 whitespace-nowrap lg:table-cell">
@@ -213,8 +160,7 @@ export default async function ManageJobsPage() {
                         <Eye className="size-4" />
                       </button>
 
-                      <DeleteJobDialog  job={job}/>
-
+                      <DeleteJobDialog job={job} />
                     </div>
                   </TableCell>
                 </TableRow>

@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import { Trash2Icon } from "lucide-react"
 
 import {
@@ -14,39 +14,39 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import { JobPost } from "../dashboard/recruiter/jobs/page"
-import { deleteJob } from "@/lib/actions/jobs";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { toast } from "@/components/ui/toast";
+import type { JobPost } from "@/types/job"
+import { deleteJob } from "@/lib/actions/jobs"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { toast } from "@/components/ui/toast"
 
 export function DeleteJobDialog({ job }: { job: JobPost }) {
-  const [open, setOpen] = useState(false);
-  const router = useRouter();
+  const [open, setOpen] = useState(false)
+  const router = useRouter()
 
   const handleDelete = async () => {
-    const res = await deleteJob(job._id);
-    console.log("deleting job id", job._id, res);
+    const res = await deleteJob(job._id)
+    console.log("deleting job id", job._id, res)
 
     if (res.deletedCount > 0) {
-      setOpen(false);
+      setOpen(false)
       toast.add({
         title: "Job deleted",
-        description: "The job has been permanently deleted!"
-      });
+        description: "The job has been permanently deleted!",
+      })
 
-      router.refresh();
-      
-    };
-
-
-  };
-
+      router.refresh()
+    }
+  }
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger
-        render={<Button variant="destructive"><Trash2Icon /></Button>}
+        render={
+          <Button variant="destructive">
+            <Trash2Icon />
+          </Button>
+        }
       />
       <AlertDialogContent size="sm">
         <AlertDialogHeader>
@@ -55,13 +55,15 @@ export function DeleteJobDialog({ job }: { job: JobPost }) {
           </AlertDialogMedia>
           <AlertDialogTitle>Delete Job?</AlertDialogTitle>
           <AlertDialogDescription>
-            This will permanently delete this Job. View{" "}
-            <a href="#">Settings</a> delete any related data.
+            This will permanently delete this Job. View <a href="#">Settings</a>{" "}
+            delete any related data.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel variant="outline">Cancel</AlertDialogCancel>
-          <AlertDialogAction variant="destructive" onClick={handleDelete}>Delete</AlertDialogAction>
+          <AlertDialogAction variant="destructive" onClick={handleDelete}>
+            Delete
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
