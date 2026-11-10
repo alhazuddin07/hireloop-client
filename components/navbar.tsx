@@ -24,7 +24,7 @@ function NavbarLinks() {
   const user = session?.user
 
   const navLinks = [
-    { href: "/jobs", label: "Browse Jobs" },
+    { href: "/browse-jobs", label: "Browse Jobs" },
     { href: "/company", label: "Company" },
     { href: "/pricing", label: "Pricing" },
     { href: `/dashboard/${user?.role || "seeker"}`, label: "Dashboard" },
@@ -83,7 +83,7 @@ export function Navbar() {
   const user = session?.user
 
   const navLinks = [
-    { href: "/jobs", label: "Browse Jobs" },
+    { href: "/browse-jobs", label: "Browse Jobs" },
     { href: "/company", label: "Company" },
     { href: "/pricing", label: "Pricing" },
     { href: `/dashboard/${user?.role || "seeker"}`, label: "Dashboard" },
