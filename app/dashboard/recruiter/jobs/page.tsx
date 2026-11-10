@@ -2,7 +2,6 @@ import Link from "next/link"
 import {
   Briefcase,
   ChevronRight,
-  EllipsisVertical,
   Eye,
   MapPin,
   Plus,
@@ -22,14 +21,11 @@ import {
 import { getJobs } from "@/lib/api/jobs"
 import { DeleteJobDialog } from "@/app/components/DeleteJobDialog"
 
-type JobStatus = "Active" | "Expired"
 
 // Same shape we collect on the New Job page, plus the table's own fields
 export type JobPost = JobForm & {
   _id: string,
   id: string
-  status: JobStatus
-  applicants: number
   posted: string
 }
 
@@ -54,13 +50,13 @@ function formatDeadline(job: JobPost) {
 }
 
 const STATUS_STYLES = {
-  Active: "bg-[#14532D]/40 text-[#4ADE80]",
-  Expired: "bg-[#1F1F1F] text-[#A0A0AB]",
+  active: "bg-[#14532D]/40 text-[#4ADE80]",
+  expired: "bg-[#1F1F1F] text-[#A0A0AB]",
 } as const
 
 const STATUS_DOT_STYLES = {
-  Active: "bg-[#4ADE80]",
-  Expired: "bg-[#5A5A60]",
+  active: "bg-[#4ADE80]",
+  expired: "bg-[#5A5A60]",
 } as const
 
 const HEAD_CELL =
@@ -73,7 +69,7 @@ export default async function ManageJobsPage() {
 
   return (
     <div className="flex-1 p-6">
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-fit">
         {/* Top bar */}
         <div>
           <nav className="flex items-center gap-2 text-[13px]">

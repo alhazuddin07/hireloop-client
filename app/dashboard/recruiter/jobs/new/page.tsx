@@ -26,6 +26,8 @@ import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "cn"
 import { createJob } from "@/lib/actions/jobs"
+import { toast } from "@/components/ui/toast"
+import { useRouter } from "next/navigation"
 
 const JOB_TYPES = ["Full-time", "Part-time", "Contract", "Internship"]
 
@@ -40,6 +42,7 @@ const JOB_CATEGORIES = [
 ]
 
 const SALARY_FREQUENCIES = ["per hour", "per week", "per month", "per year"]
+export type JobStatus = "active" | "expired"
 
 export type JobForm = {
   title: string
@@ -47,7 +50,6 @@ export type JobForm = {
   category: string
   jobType: string
   isRemote: boolean
-  status: string
   location: string
   deadline: string
   minSalary: string
@@ -55,6 +57,8 @@ export type JobForm = {
   frequency: string
   responsibilities: string
   qualifications: string
+  status: JobStatus
+  applicants: number
 }
 
 const INITIAL_JOB: JobForm = {
@@ -71,6 +75,7 @@ const INITIAL_JOB: JobForm = {
   frequency: "per hour",
   responsibilities: "",
   qualifications: "",
+  applicants: 0,
 }
 
 const SECTION_CLASSES = "rounded-2xl bg-[#151516] p-6"
@@ -79,6 +84,7 @@ const FIELD_CLASSES =
 
 export default function NewJobPage() {
   const [form, setForm] = useState<JobForm>(INITIAL_JOB)
+  const router = useRouter();
 
   const setField = (field: keyof JobForm, value: string | boolean) => {
     setForm((current) => ({ ...current, [field]: value }))
@@ -93,7 +99,16 @@ export default function NewJobPage() {
     console.log("jobdata", jobData)
 
     const result = await createJob(jobData)
-    console.log("createJob result", result)
+
+    if(result.insertedId){
+      console.log("createJob result", result)
+      toast.add({
+        title: "success",
+        description: "The job has been successfully created!"
+      })
+      router.push('/dashboard/recruiter/jobs')
+    }
+
   }
 
   return (
