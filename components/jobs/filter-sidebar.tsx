@@ -1,4 +1,6 @@
+"use client"
 import { Check } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export type FilterOption = {
   label: string
@@ -20,19 +22,31 @@ export function formatCount(count: number) {
   return count.toLocaleString("en", { notation: "compact" })
 }
 
-// One filter row: selection box on the left, label, count on the right.
-// Server-rendered and stateless on purpose — the data wiring happens in app/browse-jobs.
-// type is "radio" (single-select group) or "checkbox" (multi-select group);
-// the visual stays the same square box + check from the design either way.
 function FilterOptionRow({
   label,
   count,
   name,
   type,
 }: FilterOption & { name: string; type: "radio" | "checkbox" }) {
+  const router = useRouter()
+
+  const handleCheckboxChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const params = new URLSearchParams(window.location.search)
+    params.set(name, e.target.value)
+    router.push(`/browse-jobs?${params.toString()}`)
+  }
+
   return (
     <label className="group flex cursor-pointer items-center gap-3">
-      <input type={type} name={name} className="sr-only" />
+      <input
+        type={type}
+        name={name}
+        value={label}
+        onChange={handleCheckboxChange}
+        className="sr-only"
+      />
       <span className="flex size-5 items-center justify-center rounded border border-white/[.07] bg-[#1A1A1F] transition-colors group-has-[input:checked]:bg-white">
         <Check className="hidden size-3 text-[#141418] group-has-[input:checked]:block" />
       </span>
@@ -45,9 +59,11 @@ function FilterOptionRow({
 }
 
 // Heading + list of option rows, reused for every filter group
-export function FilterGroup({ title, mode = "multiple", options }: FilterGroupData) {
-  // A shared name makes radio inputs deselect each other (one at a time)
-  const name = title.toLowerCase().replace(/\s+/g, "-")
+export function FilterGroup({
+  title,
+  mode = "multiple",
+  options,
+}: FilterGroupData) {
   const type = mode === "single" ? "radio" : "checkbox"
 
   return (
@@ -59,7 +75,7 @@ export function FilterGroup({ title, mode = "multiple", options }: FilterGroupDa
             key={option.label}
             label={option.label}
             count={option.count}
-            name={name}
+            name={title}
             type={type}
           />
         ))}

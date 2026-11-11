@@ -43,11 +43,19 @@ const FREQUENCY_SHORT: Record<string, string> = {
   "per year": "yr",
 }
 
+// "€25 – €40" — no pay period
+export function formatSalaryRange(
+  job: Pick<JobForm, "minSalary" | "maxSalary">
+) {
+  return `€${job.minSalary} – €${job.maxSalary}`
+}
+
+// Same range plus the shortened pay period, e.g. "€25 – €40 / hr"
 export function formatSalary(
   job: Pick<JobForm, "minSalary" | "maxSalary" | "frequency">
 ) {
   const unit = FREQUENCY_SHORT[job.frequency] ?? job.frequency
-  return `€${job.minSalary} – €${job.maxSalary} / ${unit}`
+  return `${formatSalaryRange(job)} / ${unit}`
 }
 
 export function formatDeadline(job: Pick<JobPost, "deadline">) {

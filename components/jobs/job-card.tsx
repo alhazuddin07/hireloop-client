@@ -1,6 +1,7 @@
+import Link from "next/link"
 import { Banknote, Bookmark, Briefcase, Building2, Globe } from "lucide-react"
 
-import { formatSalary } from "@/lib/jobs"
+import { formatSalaryRange } from "@/lib/jobs"
 import type { JobPost } from "@/types/job"
 
 // Small rounded pill used for salary, job type, or remote status
@@ -40,7 +41,12 @@ export function JobCard({ job }: { job: JobPost }) {
         <div className="flex items-start justify-between gap-4">
           <div>
             <h3 className="text-xl font-semibold text-[#EDEDEF]">
-              {job.title}
+              <Link
+                href={`/browse-jobs/${job._id}`}
+                className="transition-colors hover:text-[#C3C0FF]"
+              >
+                {job.title}
+              </Link>
             </h3>
             <p className="mt-1 text-sm text-[#6E6E78]">
               {job.company} &bull; {job.location}
@@ -59,7 +65,7 @@ export function JobCard({ job }: { job: JobPost }) {
 
         <div className="mt-3 flex flex-wrap items-center gap-2">
           <JobChip icon={<Banknote className="size-3.5 text-[#E5E2E3]" />}>
-            {formatSalary(job)}
+            {formatSalaryRange(job)}
           </JobChip>
           <JobChip icon={<Briefcase className="size-3.5 text-[#E5E2E3]" />}>
             {job.jobType}
