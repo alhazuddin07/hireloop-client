@@ -69,7 +69,7 @@ const menuItemsByRole: Record<Role, MenuItem[]> = {
 }
 
 const DashboardSidebar = () => {
-  const { data: session, isPending } = useSession()
+  const { data: session } = useSession()
   const role = (session?.user?.role || "seeker") as keyof typeof menuItemsByRole
 
   return (
