@@ -10,7 +10,6 @@ import { JobSearchBar } from "@/components/jobs/job-search"
 import { getJobs } from "@/lib/api/jobs"
 import { JOB_CATEGORIES, JOB_TYPES } from "@/lib/jobs"
 import type { JobPost } from "@/types/job"
-import Link from "next/link"
 
 // How many fetched jobs match a given field value (used for sidebar counts)
 function countBy<T extends keyof JobPost>(
@@ -89,9 +88,7 @@ const BrowseJobsPage = async ({
 
             <div className="mt-4 space-y-4">
               {jobs.map((job: JobPost) => (
-
                 <JobCard key={job._id} job={job} />
-
               ))}
             </div>
           </section>

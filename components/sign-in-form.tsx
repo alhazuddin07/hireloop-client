@@ -12,8 +12,8 @@ export function SignInForm() {
   const [error, setError] = useState("")
   const [pending, setPending] = useState(false)
 
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams.get('redirectTo') ?? "/"
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get("redirectTo") ?? "/"
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()

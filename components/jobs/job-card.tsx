@@ -16,10 +16,11 @@ function JobChip({
 }) {
   return (
     <span
-      className={`inline-flex h-7.5 items-center gap-1.5 rounded-md border px-2.5 text-sm ${tone === "green"
-        ? "border-[#22C55E]/30 bg-[#22C55E]/10 text-[#22C55E]"
-        : "border-white/10 bg-[#1A1A1F] text-[#EDEDEF]"
-        }`}
+      className={`inline-flex h-7.5 items-center gap-1.5 rounded-md border px-2.5 text-sm ${
+        tone === "green"
+          ? "border-[#22C55E]/30 bg-[#22C55E]/10 text-[#22C55E]"
+          : "border-white/10 bg-[#1A1A1F] text-[#EDEDEF]"
+      }`}
     >
       {icon}
       {children}
@@ -29,10 +30,8 @@ function JobChip({
 
 // Single job card in the browse jobs list
 export function JobCard({ job }: { job: JobPost }) {
-
   return (
     <article className="relative flex gap-4 rounded-xl border border-white/[.07] bg-[#141418] p-4 sm:p-6">
-
       <Link
         href={`/browse-jobs/${job._id}`}
         className="absolute inset-0 rounded-xl"
@@ -52,10 +51,8 @@ export function JobCard({ job }: { job: JobPost }) {
             </h3>
 
             <p className="mt-1 text-sm text-[#6E6E78]">
-
               {job.company} &bull; {job.location}
               {job.isRemote ? " (Remote)" : ""}
-
             </p>
           </div>
 
@@ -85,5 +82,5 @@ export function JobCard({ job }: { job: JobPost }) {
         </div>
       </div>
     </article>
-  );
+  )
 }
