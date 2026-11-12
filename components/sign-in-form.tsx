@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, type FormEvent } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
 import { AuthShell } from "@/components/auth-shell"
 import { Field, PasswordField } from "@/components/auth-fields"
@@ -11,6 +11,9 @@ export function SignInForm() {
   const router = useRouter()
   const [error, setError] = useState("")
   const [pending, setPending] = useState(false)
+
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirectTo') ?? "/"
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -27,7 +30,7 @@ export function SignInForm() {
         email,
         password,
         rememberMe: true,
-        callbackURL: "/",
+        callbackURL: redirectTo,
       })
 
       if (error) {

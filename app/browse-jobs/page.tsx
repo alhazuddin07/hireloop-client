@@ -89,9 +89,9 @@ const BrowseJobsPage = async ({
 
             <div className="mt-4 space-y-4">
               {jobs.map((job: JobPost) => (
-                <Link key={job._id} href={`/browse-jobs/${job._id}`}>
-                  <JobCard key={job._id} job={job} />
-                </Link>
+
+                <JobCard key={job._id} job={job} />
+
               ))}
             </div>
           </section>

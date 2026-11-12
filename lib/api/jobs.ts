@@ -10,6 +10,6 @@ export const getJobs = async (query = ""): Promise<JobPost[]> => {
 // The backend has no GET /jobs/:id endpoint yet, so we fetch the list and pick
 // one. Swap this for a dedicated endpoint when the server adds one.
 export const getJobById = async (id: string): Promise<JobPost | null> => {
-  const jobs = await getJobs()
-  return jobs.find((job) => job._id === id) ?? null
+  const res = await fetch(`${BASE_URL}/jobs/${id}`);
+  return res.json();
 }
