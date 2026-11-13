@@ -9,8 +9,11 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { ApplicationStatusBadge } from "@/components/applications/application-status-badge"
-import { DUMMY_APPLICATIONS, formatRelativeTime } from "@/lib/applications"
+import { formatRelativeTime } from "@/lib/applications"
 import type { Application } from "@/types/application"
+import { getApplications } from "@/lib/actions/applications"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
 
 // Stats are computed so real data plugs in without changing the layout
 function getStats(applications: Application[]) {
@@ -27,8 +30,13 @@ function getStats(applications: Application[]) {
 }
 
 export default async function MyApplicationsPage() {
-    const applications = DUMMY_APPLICATIONS
-    const stats = getStats(applications)
+
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+
+    const applications = await getApplications(`applicantId=${session?.user.id}`);
+    const stats = getStats(applications);
 
     const statCards: {
         label: string
@@ -126,7 +134,7 @@ export default async function MyApplicationsPage() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {applications.map((application) => (
+                            {applications.map((application: Application) => (
                                 <TableRow
                                     key={application._id}
                                     className="border-b border-white/[.07] last:border-0 hover:bg-white/2"

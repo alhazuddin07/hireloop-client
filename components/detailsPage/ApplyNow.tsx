@@ -1,6 +1,6 @@
 "use client"
 
-import { applyToAJob } from "@/lib/actions/applications"
+import { applyToAJob, getApplicationsCount } from "@/lib/actions/applications"
 import { useSession } from "@/lib/auth-client"
 import { JobPost } from "@/types/job"
 import { Bookmark } from "lucide-react"
@@ -64,34 +64,49 @@ const ApplyNow = ({ job }: { job: JobPost }) => {
   )
 
   const handleApplyNow = async () => {
-    if (hasApplied) return
+
+    if (hasApplied) return;
 
     if (!user) {
       router.push(`/sign-in?redirectTo=/browse-jobs/${job._id}`)
       return
     } else if (user.role === "seeker") {
-      // Everything the database needs for one application
-      const application = {
-        jobId: job._id,
-        userId: user.id,
-        email: user.email,
-        jobTitle: job.title,
-        companyName: job.company,
-        jobType: job.jobType,
-        isRemote: job.isRemote,
-        appliedAt: new Date().toISOString(),
-        status: "applied" as const,
+
+      // number of jobs applied by this user
+      const countResult = await getApplicationsCount(`applicantId=${user.id}`)
+
+      //less more then 10 and not premium user
+      if (countResult.count >= 10) {
+        // redirect to the payment page
+        router.push('/payment')
+
+        return
+
+      } else {
+        // Everything the database needs for one application
+        const application = {
+          jobId: job._id,
+          userId: user.id,
+          email: user.email,
+          jobTitle: job.title,
+          companyName: job.company,
+          jobType: job.jobType,
+          isRemote: job.isRemote,
+          appliedAt: new Date().toISOString(),
+          status: "applied" as const,
+        }
+
+        const result = await applyToAJob(application)
+        if (result.insertedId) {
+          // Remember it locally so the button stays disabled per job
+          saveAppliedJobId(user.id, job._id)
+          toast.add({
+            title: "Application submitted",
+            description: `You applied for ${job.title} at ${job.company}.`,
+          })
+        }
       }
 
-      const result = await applyToAJob(application)
-      if (result.insertedId) {
-        // Remember it locally so the button stays disabled per job
-        saveAppliedJobId(user.id, job._id)
-        toast.add({
-          title: "Application submitted",
-          description: `You applied for ${job.title} at ${job.company}.`,
-        })
-      }
     } else {
       console.log("user is not a job seeker")
     }
