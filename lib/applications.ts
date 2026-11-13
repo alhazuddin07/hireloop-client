@@ -1,5 +1,3 @@
-import type { Application } from "@/types/application"
-
 // "2 hours ago", "1 day ago", "2 weeks ago" — as shown in the Applied column
 export function formatRelativeTime(iso: string) {
   const seconds = Math.round((Date.now() - new Date(iso).getTime()) / 1000)
@@ -23,5 +21,3 @@ export function formatRelativeTime(iso: string) {
     year: "numeric",
   })
 }
-
-

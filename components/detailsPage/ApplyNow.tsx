@@ -64,24 +64,21 @@ const ApplyNow = ({ job }: { job: JobPost }) => {
   )
 
   const handleApplyNow = async () => {
-
-    if (hasApplied) return;
+    if (hasApplied) return
 
     if (!user) {
       router.push(`/sign-in?redirectTo=/browse-jobs/${job._id}`)
       return
     } else if (user.role === "seeker") {
-
       // number of jobs applied by this user
       const countResult = await getApplicationsCount(`applicantId=${user.id}`)
 
       //less more then 10 and not premium user
       if (countResult.count >= 10) {
         // redirect to the payment page
-        router.push('/payment')
+        router.push("/checkout")
 
         return
-
       } else {
         // Everything the database needs for one application
         const application = {
@@ -106,7 +103,6 @@ const ApplyNow = ({ job }: { job: JobPost }) => {
           })
         }
       }
-
     } else {
       console.log("user is not a job seeker")
     }
