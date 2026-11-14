@@ -1,3 +1,4 @@
+import { APPLICATION_STATUS_LABELS } from "@/lib/applications"
 import type { ApplicationStatus } from "@/types/application"
 
 // Pill styling per status: tinted bg, 30% border, colored text
@@ -10,15 +11,6 @@ const STATUS_STYLES: Record<ApplicationStatus, string> = {
   offered: "border-[#22C55E]/30 bg-[#22C55E]/15 text-[#22C55E]",
 }
 
-const STATUS_LABELS: Record<ApplicationStatus, string> = {
-  applied: "Applied",
-  review: "Review",
-  shortlisted: "Shortlisted",
-  interview: "Interview",
-  rejected: "Rejected",
-  offered: "Offered",
-}
-
 export function ApplicationStatusBadge({
   status,
 }: {
@@ -28,7 +20,7 @@ export function ApplicationStatusBadge({
     <span
       className={`inline-flex h-5.5 items-center rounded-full border px-2.5 text-[13px] ${STATUS_STYLES[status]}`}
     >
-      {STATUS_LABELS[status]}
+      {APPLICATION_STATUS_LABELS[status]}
     </span>
   )
 }

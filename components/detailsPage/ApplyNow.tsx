@@ -7,6 +7,7 @@ import { Bookmark } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useSyncExternalStore } from "react"
 import { toast } from "@/components/ui/toast"
+import { getUserPrimiumById } from "@/lib/api/users"
 
 // Applied jobs are tracked client-side per user so the Apply button disables
 // right away, even before this data shows up in the My Applications page.
@@ -70,11 +71,15 @@ const ApplyNow = ({ job }: { job: JobPost }) => {
       router.push(`/sign-in?redirectTo=/browse-jobs/${job._id}`)
       return
     } else if (user.role === "seeker") {
+      // is premium user
+      const premiumResult = await getUserPrimiumById(user.id)
+      console.log("premiumResult", premiumResult)
+
       // number of jobs applied by this user
       const countResult = await getApplicationsCount(`applicantId=${user.id}`)
 
       //less more then 10 and not premium user
-      if (countResult.count >= 10) {
+      if (!premiumResult.premium && countResult.count >= 5) {
         // redirect to the payment page
         router.push("/checkout")
 
@@ -97,6 +102,7 @@ const ApplyNow = ({ job }: { job: JobPost }) => {
         if (result.insertedId) {
           // Remember it locally so the button stays disabled per job
           saveAppliedJobId(user.id, job._id)
+          router.push("/browse-jobs")
           toast.add({
             title: "Application submitted",
             description: `You applied for ${job.title} at ${job.company}.`,

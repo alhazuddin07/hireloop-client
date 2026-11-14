@@ -19,23 +19,6 @@ export const SALARY_FREQUENCIES = [
   "per year",
 ]
 
-export const INITIAL_JOB: JobForm = {
-  title: "",
-  company: "",
-  category: "",
-  jobType: "Full-time",
-  isRemote: false,
-  status: "active",
-  location: "",
-  deadline: "",
-  minSalary: "",
-  maxSalary: "",
-  frequency: "per hour",
-  responsibilities: "",
-  qualifications: "",
-  applicants: 0,
-}
-
 const FREQUENCY_SHORT: Record<string, string> = {
   "per hour": "hr",
   "per week": "wk",

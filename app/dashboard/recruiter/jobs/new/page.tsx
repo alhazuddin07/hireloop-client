@@ -29,17 +29,31 @@ import {
   TEXTAREA_CLASSES,
 } from "@/components/jobs/form"
 import { createJob } from "@/lib/actions/jobs"
-import {
-  INITIAL_JOB,
-  JOB_CATEGORIES,
-  JOB_TYPES,
-  SALARY_FREQUENCIES,
-} from "@/lib/jobs"
+import { JOB_CATEGORIES, JOB_TYPES, SALARY_FREQUENCIES } from "@/lib/jobs"
 import type { JobForm } from "@/types/job"
+import { useSession } from "@/lib/auth-client"
 
 export default function NewJobPage() {
-  const [form, setForm] = useState<JobForm>(INITIAL_JOB)
   const router = useRouter()
+  const { data: session } = useSession()
+
+  const [form, setForm] = useState<JobForm>({
+    title: "",
+    company: "",
+    recruiterId: session?.user.id ?? "",
+    category: "",
+    jobType: "Full-time",
+    isRemote: false,
+    status: "active",
+    location: "",
+    deadline: "",
+    minSalary: "",
+    maxSalary: "",
+    frequency: "per hour",
+    responsibilities: "",
+    qualifications: "",
+    applicants: 0,
+  })
 
   const setField = (field: keyof JobForm, value: string | boolean) => {
     setForm((current) => ({ ...current, [field]: value }))

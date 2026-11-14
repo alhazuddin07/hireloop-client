@@ -22,12 +22,15 @@ import { getJobs } from "@/lib/api/jobs"
 import { formatDeadline, formatSalary } from "@/lib/jobs"
 import type { JobPost } from "@/types/job"
 import { DeleteJobDialog } from "@/app/components/DeleteJobDialog"
+import { getSession } from "@/lib/core/server"
 
 const HEAD_CELL =
   "h-[50px] px-3 text-left text-[13px] font-medium uppercase text-[#A0A0AB] whitespace-nowrap"
 
 export default async function ManageJobsPage() {
-  const jobs = await getJobs()
+  const session = await getSession()
+
+  const jobs = await getJobs(`recruiterId=${session?.user.id}`)
 
   return (
     <div className="flex-1 p-6">
@@ -124,12 +127,15 @@ export default async function ManageJobsPage() {
                   <TableCell className="px-3 py-4 whitespace-nowrap text-white">
                     {formatSalary(job)}
                   </TableCell>
-                  {/* Applicants (hidden on small screens) */}
+                  {/* Applicants (hidden on small screens) — links to the review page */}
                   <TableCell className="hidden px-3 py-4 whitespace-nowrap md:table-cell">
-                    <span className="flex items-center gap-2 text-[#C3C0FF]">
+                    <Link
+                      href={`/dashboard/recruiter/jobs/${job._id}/applications`}
+                      className="flex items-center gap-2 text-[#C3C0FF] hover:underline hover:underline-offset-4"
+                    >
                       <Users className="size-4" />
                       {job.applicants} Candidates
-                    </span>
+                    </Link>
                   </TableCell>
                   {/* Status */}
                   <TableCell className="px-3 py-4 whitespace-nowrap">
@@ -152,13 +158,13 @@ export default async function ManageJobsPage() {
                         <SquarePen className="size-4" />
                         Update
                       </Link>
-                      <button
-                        type="button"
-                        aria-label={`View ${job.title}`}
+                      <Link
+                        href={`/dashboard/recruiter/jobs/${job._id}/applications`}
+                        aria-label={`View applications for ${job.title}`}
                         className="inline-flex size-8 items-center justify-center rounded-lg bg-[#1F1F1F] text-[#A0A0AB] hover:text-white"
                       >
                         <Eye className="size-4" />
-                      </button>
+                      </Link>
 
                       <DeleteJobDialog job={job} />
                     </div>

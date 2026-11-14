@@ -1,3 +1,24 @@
+import type { ApplicationStatus } from "@/types/application"
+
+// Every status an application can move through, with its display label —
+// shared by the status badge (seeker view) and the status select (recruiter view)
+export const APPLICATION_STATUS_OPTIONS: {
+  value: ApplicationStatus
+  label: string
+}[] = [
+  { value: "applied", label: "Applied" },
+  { value: "review", label: "Review" },
+  { value: "shortlisted", label: "Shortlisted" },
+  { value: "interview", label: "Interview" },
+  { value: "rejected", label: "Rejected" },
+  { value: "offered", label: "Offered" },
+]
+
+export const APPLICATION_STATUS_LABELS: Record<ApplicationStatus, string> =
+  Object.fromEntries(
+    APPLICATION_STATUS_OPTIONS.map(({ value, label }) => [value, label])
+  ) as Record<ApplicationStatus, string>
+
 // "2 hours ago", "1 day ago", "2 weeks ago" — as shown in the Applied column
 export function formatRelativeTime(iso: string) {
   const seconds = Math.round((Date.now() - new Date(iso).getTime()) / 1000)
