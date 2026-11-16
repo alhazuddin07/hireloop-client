@@ -6,6 +6,7 @@ import { ChevronDown, Loader2 } from "lucide-react"
 
 import { ROLE_OPTIONS } from "@/lib/users"
 import type { Role } from "@/types/menu"
+import { toast } from "../ui/toast"
 
 // Pill styling per role: tinted bg, 30% border, colored text
 const ROLE_PILL_STYLES: Record<Role, string> = {
@@ -41,8 +42,16 @@ export function UserRoleSelect({
 
         if (result.success) {
           router.refresh()
+          toast.add({
+            title: "success",
+            description: "Role update successfully!"
+          })
         } else {
           setValue(previous)
+          toast.add({
+            title: 'error',
+            description: "Failed to update user role!",
+          })
         }
       } catch (error) {
         console.error("Role update failed:", error)
@@ -58,9 +67,8 @@ export function UserRoleSelect({
         value={value}
         disabled={isPending}
         onChange={(event) => handleChange(event.target.value as Role)}
-        className={`h-7.5 cursor-pointer appearance-none rounded-full border pr-7 pl-3 text-[13px] transition-all outline-none disabled:cursor-not-allowed disabled:opacity-60 ${
-          ROLE_PILL_STYLES[value]
-        }`}
+        className={`h-7.5 cursor-pointer appearance-none rounded-full border pr-7 pl-3 text-[13px] transition-all outline-none disabled:cursor-not-allowed disabled:opacity-60 ${ROLE_PILL_STYLES[value]
+          }`}
       >
         {ROLE_OPTIONS.map((option) => (
           <option key={option.value} value={option.value}>

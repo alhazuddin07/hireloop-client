@@ -15,6 +15,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { authClient } from "@/lib/auth-client"
+import { redirect } from "next/navigation"
 
 const navPillClasses =
   "hidden h-[68px] items-center gap-3 rounded-[8px] border border-white/[0.07] bg-[#1A1A1F] pl-6 pr-2 lg:flex"
@@ -91,6 +92,7 @@ export function Navbar() {
 
   const handleSignOut = async () => {
     await authClient.signOut()
+    redirect('/sign-in')
   }
 
   return (

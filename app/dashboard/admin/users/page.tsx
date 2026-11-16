@@ -11,10 +11,11 @@ import {
 } from "@/components/ui/table"
 import { UserRoleSelect } from "@/components/users/user-role-select"
 import { handleRoleChange } from "./actions"
-import { getUsers } from "@/lib/api/users"
+
 import { formatJoinDate } from "@/lib/users"
 import { getSession } from "@/lib/core/server"
 import type { PlatformUser } from "@/types/user"
+import { getUsers } from "@/lib/actions/better-auth-users"
 
 const HEAD_CELL =
   "h-11 px-3 text-left text-[13px] font-medium uppercase text-[#6E6E78] whitespace-nowrap"

@@ -102,11 +102,11 @@ const ApplyNow = ({ job }: { job: JobPost }) => {
         if (result.insertedId) {
           // Remember it locally so the button stays disabled per job
           saveAppliedJobId(user.id, job._id)
-          router.push("/browse-jobs")
           toast.add({
             title: "Application submitted",
             description: `You applied for ${job.title} at ${job.company}.`,
           })
+          router.push("/browse-jobs")
         }
       }
     } else {

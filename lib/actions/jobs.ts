@@ -1,18 +1,6 @@
-import type { JobForm } from "@/types/job"
+
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000"
-
-export const createJob = async (data: JobForm) => {
-  const res = await fetch(`${BASE_URL}/jobs`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify(data),
-  })
-
-  return res.json()
-}
 
 export const deleteJob = async (jobId: string) => {
   const res = await fetch(`${BASE_URL}/jobs/${jobId}`, {

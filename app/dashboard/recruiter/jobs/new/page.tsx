@@ -28,10 +28,10 @@ import {
   JobSelect,
   TEXTAREA_CLASSES,
 } from "@/components/jobs/form"
-import { createJob } from "@/lib/actions/jobs"
 import { JOB_CATEGORIES, JOB_TYPES, SALARY_FREQUENCIES } from "@/lib/jobs"
 import type { JobForm } from "@/types/job"
 import { useSession } from "@/lib/auth-client"
+import { createJob } from "@/lib/api/jobs"
 
 export default function NewJobPage() {
   const router = useRouter()
