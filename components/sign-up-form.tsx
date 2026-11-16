@@ -20,14 +20,49 @@ export function SignUpForm() {
   const router = useRouter()
   const [role, setRole] = useState<Role>("seeker")
   const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imageURL, setImageURL] = useState("")
+  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("")
   const [pending, setPending] = useState(false)
 
   // Grabs the selected file only — uploading it to storage and passing the
   // resulting URL to signUp is wired later
-  function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
-    setImageFile(event.target.files?.[0] ?? null)
-  }
+  const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] ?? null;
+
+    if (!file) return;
+
+    setImageFile(file);
+    setError("");
+    setUploading(true);
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const imgbbAPI = `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`;
+
+    try {
+      const res = await fetch(imgbbAPI, {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await res.json();
+
+      if (!res.ok || !result.success) {
+        throw new Error("Image upload failed");
+      }
+
+      setImageURL(result.data.url);
+    } catch (error) {
+      console.error("Image upload error:", error);
+      setImageFile(null);
+      setImageURL("");
+      setError("Failed to upload image. Please try again.");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -52,6 +87,7 @@ export function SignUpForm() {
         email,
         password,
         role,
+        image: imageURL || undefined,
         callbackURL: "/",
       })
 
@@ -122,7 +158,7 @@ export function SignUpForm() {
           </span>
           <label
             htmlFor="image"
-            className="flex h-11 cursor-pointer items-center gap-2.5 rounded-lg border border-white/[0.08] bg-[#0E0F14] px-3.5 text-sm text-[#63636D] transition hover:border-[#5C53FE]/60"
+            className="flex h-11 cursor-pointer items-center gap-2.5 rounded-lg border border-white/8 bg-[#0E0F14] px-3.5 text-sm text-[#63636D] transition hover:border-[#5C53FE]/60"
           >
             <ImagePlus className="size-4 shrink-0 text-[#8C8C95]" />
             <span className="truncate">
@@ -135,6 +171,7 @@ export function SignUpForm() {
             type="file"
             accept="image/*"
             className="hidden"
+            required
             onChange={handleImageChange}
           />
         </div>
@@ -191,10 +228,16 @@ export function SignUpForm() {
 
         <button
           type="submit"
-          disabled={pending}
+          disabled={pending || uploading}
           className="mt-2 flex h-11 w-full items-center justify-center rounded-lg bg-[#5C53FE] text-sm font-semibold text-white shadow-[0_0_24px_rgba(92,83,254,0.28)] transition-colors hover:bg-[#4A42E8] focus-visible:ring-2 focus-visible:ring-[#5C53FE]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B0C10] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {pending ? "Creating account…" : "Create account"}
+          {uploading
+            ? "Uploading image..."
+            : pending
+              ? "Creating account..."
+              : "Create account"
+          }
+
         </button>
       </form>
     </AuthShell>

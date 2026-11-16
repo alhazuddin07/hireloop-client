@@ -15,7 +15,8 @@ import { handleRoleChange } from "./actions"
 import { formatJoinDate } from "@/lib/users"
 import { getSession } from "@/lib/core/server"
 import type { PlatformUser } from "@/types/user"
-import { getUsers } from "@/lib/actions/better-auth-users"
+import { getUsers } from "@/lib/api/users"
+
 
 const HEAD_CELL =
   "h-11 px-3 text-left text-[13px] font-medium uppercase text-[#6E6E78] whitespace-nowrap"
@@ -55,12 +56,17 @@ export default async function AdminUsersPage() {
   // Only admins can manage users
   if (session?.user?.role !== "admin") notFound()
 
-  const { users, total } = await getUsers()
+  // The Express backend returns a flat array of users (with _id), not a
+  // { users, total } payload — total is just the array length
+  const users = await getUsers()
   // Better Auth types role as optional string; the auth config restricts it
   // to the three HireLoop roles, so anything unexpected falls back to seeker
-  const list = (users ?? []).map( (user) => ({...user, role: (user.role ?? "seeker") as PlatformUser["role"] }))
+  const list = (users ?? []).map((user: PlatformUser) => ({
+    ...user,
+    role: (user.role ?? "seeker") as PlatformUser["role"],
+  }))
   const sorted = [...list].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-  const stats = getStats(sorted, total)
+  const stats = getStats(sorted, sorted.length)
 
   return (
     <div className="flex-1 p-6">
@@ -177,7 +183,7 @@ export default async function AdminUsersPage() {
               )}
               {sorted.map((user) => (
                 <TableRow
-                  key={user.id}
+                  key={user._id ?? user.id}
                   className="h-16 border-b border-white/7 last:border-0 hover:bg-[#1A1A1F]/50"
                 >
                   {/* User */}
@@ -206,7 +212,7 @@ export default async function AdminUsersPage() {
                   <TableCell className="px-3 py-4 whitespace-nowrap">
                     <div className="inline-flex">
                       <UserRoleSelect
-                        userId={user.id}
+                        userId={user._id ?? user.id}
                         role={user.role}
                         onRoleChange={handleRoleChange}
                       />

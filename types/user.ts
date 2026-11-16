@@ -4,6 +4,7 @@ import type { Role } from "@/types/menu"
 // additionalFields config, banned from the admin plugin
 export type PlatformUser = {
   id: string
+  _id?: string
   name: string
   email: string
   role: Role
