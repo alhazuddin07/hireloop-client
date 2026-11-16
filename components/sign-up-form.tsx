@@ -1,8 +1,9 @@
 "use client"
 
-import { useState, type FormEvent } from "react"
+import { useState, type ChangeEvent, type FormEvent } from "react"
 import { useRouter } from "next/navigation"
 import { cn } from "cn"
+import { ImagePlus } from "lucide-react"
 
 import { AuthShell } from "@/components/auth-shell"
 import { Field, PasswordField } from "@/components/auth-fields"
@@ -11,7 +12,6 @@ import { authClient } from "@/lib/auth-client"
 const roles = [
   { value: "seeker", label: "Job seeker" },
   { value: "recruiter", label: "Recruiter" },
-  { value: "admin", label: "Admin" },
 ] as const
 
 type Role = (typeof roles)[number]["value"]
@@ -19,8 +19,15 @@ type Role = (typeof roles)[number]["value"]
 export function SignUpForm() {
   const router = useRouter()
   const [role, setRole] = useState<Role>("seeker")
+  const [imageFile, setImageFile] = useState<File | null>(null)
   const [error, setError] = useState("")
   const [pending, setPending] = useState(false)
+
+  // Grabs the selected file only — uploading it to storage and passing the
+  // resulting URL to signUp is wired later
+  function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
+    setImageFile(event.target.files?.[0] ?? null)
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -82,7 +89,7 @@ export function SignUpForm() {
           <div
             role="radiogroup"
             aria-label="Account type"
-            className="grid grid-cols-3 gap-1 rounded-xl border border-white/6 bg-[#121318] p-1"
+            className="grid grid-cols-2 gap-1 rounded-xl border border-white/6 bg-[#121318] p-1"
           >
             {roles.map((option) => {
               const active = role === option.value
@@ -106,6 +113,30 @@ export function SignUpForm() {
               )
             })}
           </div>
+        </div>
+
+        {/* Profile picture — upload wired later via handleImageChange */}
+        <div className="space-y-1.5">
+          <span className="block text-sm font-medium text-[#D6D6DC]">
+            Profile picture
+          </span>
+          <label
+            htmlFor="image"
+            className="flex h-11 cursor-pointer items-center gap-2.5 rounded-lg border border-white/[0.08] bg-[#0E0F14] px-3.5 text-sm text-[#63636D] transition hover:border-[#5C53FE]/60"
+          >
+            <ImagePlus className="size-4 shrink-0 text-[#8C8C95]" />
+            <span className="truncate">
+              {imageFile ? imageFile.name : "Upload an image (optional)"}
+            </span>
+          </label>
+          <input
+            id="image"
+            name="image"
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleImageChange}
+          />
         </div>
 
         <Field

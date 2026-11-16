@@ -10,14 +10,17 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { useSession } from "@/lib/auth-client"
+import { ROLE_LABELS } from "@/lib/users"
 import type { MenuItem, Role } from "@/types/menu"
 import Link from "next/link"
 import {
   Bookmark,
   Briefcase,
   Building2,
+  CircleUserRound,
   CreditCard,
   FileText,
+  House,
   LayoutDashboard,
   LogOut,
   PlusCircle,
@@ -68,15 +71,47 @@ const menuItemsByRole: Record<Role, MenuItem[]> = {
   ],
 }
 
+// Shared across every role — link back to the landing page
+const HOME_ITEM: MenuItem = { name: "Home", url: "/", icon: House }
+
 const DashboardSidebar = () => {
   const { data: session } = useSession()
-  const role = (session?.user?.role || "seeker") as keyof typeof menuItemsByRole
+  const user = session?.user
+  const role = (user?.role || "seeker") as keyof typeof menuItemsByRole
 
   return (
     <Sidebar>
-      <SidebarHeader />
+      <SidebarHeader>
+        <div className="flex items-center gap-2.5 px-2 py-1">
+          {user?.image ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={user.image}
+              alt={user.name || "Profile"}
+              className="size-9 shrink-0 rounded-full object-cover"
+            />
+          ) : (
+            <CircleUserRound className="size-9 shrink-0 text-[#6E6E78]" />
+          )}
+          <div className="min-w-0">
+            <p className="truncate text-sm font-medium text-[#EDEDEF]">
+              {user?.name || "User"}
+            </p>
+            <p className="text-xs text-[#6E6E78]">{ROLE_LABELS[role]}</p>
+          </div>
+        </div>
+      </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup />
+        <SidebarGroup>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton render={<Link href={HOME_ITEM.url} />}>
+                <HOME_ITEM.icon />
+                <span>{HOME_ITEM.name}</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
         <SidebarGroup />
         <SidebarGroup>
           <SidebarMenu>
