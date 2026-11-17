@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image"
 import Link from "next/link"
-import { Menu } from "lucide-react"
+import { CircleUserRound, Menu } from "lucide-react"
 
 import logo from "@/app/images/logo.png"
 import { Button } from "@/components/ui/button"
@@ -92,7 +92,7 @@ export function Navbar() {
 
   const handleSignOut = async () => {
     await authClient.signOut()
-    redirect('/sign-in')
+    redirect("/sign-in")
   }
 
   return (
@@ -105,18 +105,29 @@ export function Navbar() {
           <NavbarLinks />
           <Separator orientation="vertical" className="h-6 bg-[#A8A8A8]/40" />
           {user ? (
-            <>
-              <>
-                <span className="p-2">welcome {user.name}</span>
-                <Button variant={"destructive"} onClick={handleSignOut}>
-                  Sign Out
-                </Button>
-              </>
-            </>
+            <div className="flex items-center gap-2 pr-1">
+              {user.image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={user.image}
+                  alt=""
+                  className="size-8 rounded-full object-cover"
+                />
+              ) : (
+                <CircleUserRound
+                  className="size-8 text-[#A0A0AB]"
+                  strokeWidth={1.5}
+                />
+              )}
+              <span className="text-sm text-[#EDEDEF]">
+                Welcome {user.name}
+              </span>
+              <Button variant="destructive" onClick={handleSignOut}>
+                Sign Out
+              </Button>
+            </div>
           ) : (
-            <>
-              <NavbarActions />
-            </>
+            <NavbarActions />
           )}
         </nav>
 
@@ -162,9 +173,24 @@ export function Navbar() {
               ))}
             </nav>
             {user ? (
-              <>
-                <span>Welcome {user.name}</span>
-              </>
+              <div className="flex items-center gap-3 px-6 py-6">
+                {user.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={user.image}
+                    alt=""
+                    className="size-8 shrink-0 rounded-full object-cover"
+                  />
+                ) : (
+                  <CircleUserRound
+                    className="size-8 shrink-0 text-[#A0A0AB]"
+                    strokeWidth={1.5}
+                  />
+                )}
+                <span className="text-base text-[#EDEDEF]">
+                  Welcome {user.name}
+                </span>
+              </div>
             ) : (
               <>
                 <SheetFooter className="flex-col items-stretch gap-3 border-t border-white/[0.07] px-6 py-6">
